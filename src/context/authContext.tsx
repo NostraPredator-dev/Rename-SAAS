@@ -1,0 +1,80 @@
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import type { User } from '@supabase/supabase-js';
+import { supabase } from '../lib/supabase';
+
+interface AuthContextType {
+    currentUser: User | null;
+    isLoading: boolean;
+    signInWithGoogle: () => Promise<void>;
+    logout: () => Promise<void>;
+    upgradeToPro: () => void;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const useAuth = () => {
+    const context = useContext(AuthContext);
+    if (context === undefined) {
+        throw new Error('useAuth must be used within an AuthProvider');
+    }
+    return context;
+};
+
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const [currentUser, setCurrentUser] = useState<User | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        // Check active sessions and sets the user
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            setCurrentUser(session?.user ?? null);
+            setIsLoading(false);
+        });
+
+        // Listen for changes on auth state
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            setCurrentUser(session?.user ?? null);
+            setIsLoading(false);
+        });
+
+        return () => subscription.unsubscribe();
+    }, []);
+
+    const signInWithGoogle = async () => {
+        const { error } = await supabase.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+                redirectTo: `${window.location.origin}/rename`
+            }
+        });
+
+        if (error) {
+            throw error;
+        }
+    };
+
+    const logout = async () => {
+        const { error } = await supabase.auth.signOut();
+        if (error) {
+            throw error;
+        }
+    };
+
+    const upgradeToPro = () => {
+        // This is a mock function that would typically integrate with a payment provider
+        if (currentUser) {
+        // In a real implementation, this would make an API call to upgrade the user's subscription
+        console.log('Upgrading to Pro...');
+        }
+    };
+
+    const value = {
+        currentUser,
+        isLoading,
+        signInWithGoogle,
+        logout,
+        upgradeToPro
+    };
+
+    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
