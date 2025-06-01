@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/authContext'
 import { AlertTriangle } from 'lucide-react';
 
@@ -8,7 +8,6 @@ export default function SignupPage() {
     const [isLoading, setIsLoading] = useState(false);
 
     const { signInWithGoogle } = useAuth();
-    const navigate = useNavigate();
 
     const handleGoogleSignIn = async () => {
         try {
