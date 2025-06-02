@@ -29,6 +29,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         supabase.auth.getSession().then(({ data: { session } }) => {
             setCurrentUser(session?.user ?? null);
             setIsLoading(false);
+
+            if (window.location.hash && window.location.pathname === '/rename') {
+                history.replaceState(null, '', window.location.pathname);
+            }
         });
 
         // Listen for changes on auth state
@@ -41,11 +45,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }, []);
 
     const signInWithGoogle = async () => {
-        console.log(window.location.origin)
         const { error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: `https://rename-saas.vercel.app/rename`
+                redirectTo: `${window.location.origin}/rename`
             }
         });
 
