@@ -72,6 +72,7 @@ export default function App() {
                             </ProtectedRoute>
                         } 
                     />
+                    <Route path="pricing" element={<PricingPage creditBalance={creditBalance} setCreditBalance={setCreditBalance} />} />
                     <Route path="history" element={<HistoryPage creditBalance={creditBalance}/>} />
                 </Route>
             </Routes>

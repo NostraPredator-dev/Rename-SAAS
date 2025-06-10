@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../context/authContext';
-import { LogOut, History } from 'lucide-react';
+import { LogOut, History, ReceiptIndianRupee } from 'lucide-react';
 
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -105,6 +105,14 @@ const Header = () => {
                                             >
                                                 <History className="mr-2" size={16}/>
                                                 History
+                                            </Link>
+                                            <Link
+                                                to="/pricing"
+                                                onClick={() => setIsMenuOpen(false)}
+                                                className="flex items-center h-10 w-full px-4 py-2 text-sm text-gray-700 border-b border-gray-100 hover:bg-gray-100 hover:text-primary-600 transition-colors duration-200"
+                                            >
+                                                <ReceiptIndianRupee className="mr-2" size={16}/>
+                                                Pricing
                                             </Link>
                                             <button
                                                 onClick={handleLogout}
