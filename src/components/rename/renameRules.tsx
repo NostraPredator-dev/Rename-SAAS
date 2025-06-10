@@ -33,20 +33,21 @@ const RenameRules: React.FC<RenameRulesProps> = ({ rules, setRules, onFilenamesC
 
     const updateRule = (id: string, field: string, value: any) => {
         const updatedRules = rules.map(rule => {
-            if (rule.id === id) {
-                if (field === 'active')
-                    return { ...rule, active: value };
-                else {
-                    return { 
-                        ...rule, 
-                        config: { 
-                            ...rule.config, 
-                            [field]: value 
-                        } 
-                    };
-                }
+            if (rule.id !== id) 
+                return rule;
+
+            if (rule.id === id && field === 'active')
+                return { ...rule, active: value };
+            else 
+            {
+                return { 
+                    ...rule, 
+                    config: { 
+                        ...rule.config, 
+                        [field]: value 
+                    } 
+                };
             }
-            return rule;
         });
         setRules(updatedRules);
     };
@@ -98,7 +99,6 @@ const RenameRules: React.FC<RenameRulesProps> = ({ rules, setRules, onFilenamesC
     const savePreset = () => {
         if (!presetName.trim()) return;
 
-        // Prepare the preset data
         const presetData = {
             rules: rules.map(rule => ({
                 id: rule.id,
