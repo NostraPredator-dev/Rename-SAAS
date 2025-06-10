@@ -6,9 +6,8 @@ import RulePresets from '../components/rename/rulePresets';
 import FilePreview from '../components/rename/filePreview';
 import type { FileWithPreview, RenameRule, RulePreset } from '../components/rename/file';
 import { generateNewFilenames, downloadFiles } from '../components/rename/util/renameUtil';
-import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/authContext';
-import { v4 as uuidv4 } from 'uuid';
+import axios from 'axios';
 
 interface RenamePageProps {
     creditBalance: number;
@@ -30,22 +29,36 @@ export default function RenamePage({ creditBalance, setCreditBalance, downloadRe
             return;
         }
 
-        const { error } = await supabase
-            .from('credit_history')
-            .insert([
-            {
-                id: uuidv4(),
-                user_id: userId,
-                amount: (`-` + files.length),
-                reason: name,
-                used_at: new Date().toISOString(),
-            },
-        ])
-
-        if (error) {
+        const response = await axios.post('http://localhost:3000/credit-history', {
+            user_id: userId,
+            amount: (`-` + files.length),
+            reason: name,
+            used_at: new Date().toISOString(),
+        })
+        if (response.status !== 200) {
+            const { error } = response.data
             console.error('Error updating history:', error);
             toast.error('Failed to update credit history');
         }
+    };
+
+    async function updateCreditBalance(credits: number) {
+        const userId = currentUser?.id;
+        if (!userId) {
+            toast.error('User not authenticated');
+            return;
+        }
+
+        const response = await axios.post('http://localhost:3000/credit-balance', {
+            user_id: userId,
+            credits: credits,
+        })
+        if (response.status !== 200) {
+            const { error } = response.data
+            console.error('Error updating credits:', error);
+            toast.error('Failed to update credits');
+        }
+        setCreditBalance(credits);
     };
 
     const applyPreset = (preset: RulePreset) => {
@@ -59,7 +72,7 @@ export default function RenamePage({ creditBalance, setCreditBalance, downloadRe
             }
             const updatedFiles = generateNewFilenames(files, preset.data.rules);
             setFiles(updatedFiles);
-            setCreditBalance(creditBalance - requiredCredits);
+            updateCreditBalance(creditBalance - requiredCredits);
             updateHistory(preset.name);
             setDownloadReady(true);
         }
@@ -76,7 +89,7 @@ export default function RenamePage({ creditBalance, setCreditBalance, downloadRe
             }
             const updatedFiles = generateNewFilenames(files, rules);
             setFiles(updatedFiles);
-            setCreditBalance(creditBalance - requiredCredits);
+            updateCreditBalance(creditBalance - requiredCredits);
             const ruleString = rules.map(rule => rule.type).join(', ');
             updateHistory(ruleString);
             setDownloadReady(true);
@@ -100,24 +113,6 @@ export default function RenamePage({ creditBalance, setCreditBalance, downloadRe
         <div className="bg-gray-50 py-8 animate-fade-in">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="space-y-6">
-                    {/* <div className="max-w-2xl mx-auto mb-8">
-                        <div className="w-full h-20 bg-amber-50 rounded-lg p-6 mb-12 flex justify-between items-center">
-                            <div className="flex items-center">
-                                <Coins className="text-amber-500 mr-3" size={24} />
-                                <div>
-                                    <p className="text-amber-800 text-sm font-medium">Credit Balance</p>
-                                    <p className="text-3xl font-bold text-amber-800">{creditBalance}</p>
-                                </div>
-                            </div>
-                            <div>
-                                <button className="flex items-center text-amber-800 hover:text-amber-600 transition-colors">
-                                    <Clock className="mr-2" size={18} />
-                                    <span className="font-medium">Transaction History</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div> */}
-
                     <div className="bg-white rounded-lg shadow p-6">
                         <h2 className="text-lg font-medium text-gray-900 mb-4">Uploaded Files ({files.length})</h2>
                         <DropZone setFiles={setFiles} />

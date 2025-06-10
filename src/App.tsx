@@ -7,12 +7,44 @@ import ProtectedRoute from "./components/auth/protectedRoute"
 import PricingPage from "./pages/pricing"
 import RenamePage from "./pages/rename"
 import HistoryPage from "./pages/history"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Toaster } from "react-hot-toast"
+import { useAuth } from "./context/authContext"
+import axios from "axios"
 
 export default function App() {
-    const [creditBalance, setCreditBalance] = useState(2000);
+    const [creditBalance, setCreditBalance] = useState(0);
     const [downloadReady, setDownloadReady] = useState(false);
+
+    const { currentUser } = useAuth();
+
+    useEffect(() => {
+        async function getBalance(id: string) {
+            const res = await axios.get('http://localhost:3000/credit-balance', { 
+                params: {
+                    user_id: id 
+                } 
+            });
+
+            if (!res || res.data.length === 0) {
+                const response = await axios.post('http://localhost:3000/create-credit-balance', {
+                    user_id: id,
+                })
+                if (response.status !== 200) {
+                    const { error } = response.data
+                    console.error('Error updating credits:', error);
+                } else {
+                    setCreditBalance(0);
+                }
+            } else 
+                setCreditBalance(res.data[0].credit_balance || 0);
+        }
+
+        const userId = currentUser?.id;
+        if (userId) {
+            getBalance(userId);
+        }
+    }, [currentUser]);
 
     return (
         <>
@@ -30,8 +62,12 @@ export default function App() {
                                         creditBalance={creditBalance} 
                                         setCreditBalance={setCreditBalance}
                                         downloadReady={downloadReady}
-                                        setDownloadReady={setDownloadReady} /> : 
-                                    <PricingPage creditBalance={creditBalance}/>
+                                        setDownloadReady={setDownloadReady} 
+                                    /> : 
+                                    <PricingPage 
+                                        creditBalance={creditBalance}
+                                        setCreditBalance={setCreditBalance}
+                                    />
                                 }
                             </ProtectedRoute>
                         } 

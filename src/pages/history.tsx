@@ -1,8 +1,8 @@
 import { Coins, ArrowDownLeft, ArrowUpRight } from "lucide-react";
 import { useAuth } from "../context/authContext";
 import { toast } from "react-hot-toast";
-import { supabase } from "../lib/supabase";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 interface HistoryPageProps {
     creditBalance: number;
@@ -26,15 +26,19 @@ export default function HistoryPage({ creditBalance }: HistoryPageProps) {
             return;
         }
 
-        const { data, error} = await supabase.
-            from('credit_history')
-            .select('*')
-            .eq('user_id', userId)
-            .order('used_at', { ascending: false });
-        if (error) {
+        const response = await axios.get('http://localhost:3000/credit-history', {
+            params: {
+                user_id: userId
+            }
+        });
+        if (response.status !== 200) {
+            const { error } = response.data;
             console.error('Error fetching credit history:', error);
             toast.error('Failed to fetch credit history');
-        } else return data;
+            return;
+        } else {
+            return response.data;
+        }
     }
 
     useEffect(() => {

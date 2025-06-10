@@ -7,7 +7,6 @@ interface AuthContextType {
     isLoading: boolean;
     signInWithGoogle: () => Promise<void>;
     logout: () => Promise<void>;
-    upgradeToPro: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -61,20 +60,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     };
 
-    const upgradeToPro = () => {
-        // This is a mock function that would typically integrate with a payment provider
-        if (currentUser) {
-        // In a real implementation, this would make an API call to upgrade the user's subscription
-        console.log('Upgrading to Pro...');
-        }
-    };
-
     const value = {
         currentUser,
         isLoading,
         signInWithGoogle,
         logout,
-        upgradeToPro
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

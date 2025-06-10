@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Clock, Trash } from 'lucide-react';
 import type { RulePreset } from './file';
-import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/authContext';
 import { toast } from 'react-hot-toast';
+import axios from 'axios';
 
 interface RulePresetsProps {
     onFilenamesChange: (preset: RulePreset) => void;
@@ -18,7 +18,6 @@ const RulePresets: React.FC<RulePresetsProps> = ({ onFilenamesChange }) => {
         const fetchPresets = async () => {
             const userPresets = await getUserPresets();
             if (!userPresets || userPresets.length === 0) {
-                console.log('No presets found for the user');
                 setPresets([]);
                 return;
             }
@@ -43,16 +42,19 @@ const RulePresets: React.FC<RulePresetsProps> = ({ onFilenamesChange }) => {
             return;
         }
 
-        const { data, error } = await supabase
-            .from('presets')
-            .select('*')
-            .eq('user_id', userId);
+        const response = await axios.get('http://localhost:3000/get-presets', {
+            params: {
+                user_id: userId
+            }
+        });
 
-        if (error) {
+        if (response.status !== 200) {
+            const { error } = response.data;
             console.error('Error fetching presets:', error);
             toast.error('Failed to fetch presets. Please try again.');
-        }
-        else return data;
+        } else {
+            return response.data;
+        }   
     }
 
 
@@ -67,13 +69,13 @@ const RulePresets: React.FC<RulePresetsProps> = ({ onFilenamesChange }) => {
             return;
         }
 
-        const { error } = await supabase
-            .from('presets')
-            .delete()
-            .eq('id', id)
-            .eq('user_id', userId);
+        const response = await axios.post('http://localhost:3000/delete-preset', {
+            id: id,
+            user_id: userId
+        });
 
-        if (error) {
+        if (response.status !== 200) {
+            const { error } = response.data;
             console.error('Error deleting preset:', error);
             toast.error('Failed to delete preset. Please try again.');
         } else {

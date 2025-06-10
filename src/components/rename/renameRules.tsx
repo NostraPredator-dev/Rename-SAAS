@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { Plus, Save, Trash, ArrowDown, ArrowUp, CheckCircle } from 'lucide-react';
 import type { RenameRule } from './file';
-import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/authContext';
-import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'react-hot-toast';
+import axios from 'axios';
 
 interface RenameRulesProps {
     rules: RenameRule[];
@@ -78,24 +77,18 @@ const RenameRules: React.FC<RenameRulesProps> = ({ rules, setRules, onFilenamesC
             toast.error('User not authenticated');
             return;
         }
+        
+        const response = await axios.post('http://localhost:3000/save-preset', {
+            userId: userId,
+            presetName: presetName,
+            presetData: presetData
+        });
 
-        const { error } = await supabase
-            .from('presets')
-            .insert([
-            {
-                user_id: userId,
-                id: uuidv4(),
-                name: presetName,
-                data: presetData,
-                created_at: new Date().toISOString()
-            }
-        ]);
-
-        if (error) {
+        if(response.status !== 200) {
+            const { error } = response.data;
             console.error('Error saving preset:', error);
             toast.error('Failed to save preset. Please try again.');
-        }
-        else {
+        } else {
             window.dispatchEvent(new Event('presetSaved'));
             toast.success('Preset saved successfully!');
         }
