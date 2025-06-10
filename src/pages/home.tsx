@@ -35,7 +35,7 @@ const faqs = [
     },
     {
         question: "Can I rename files stored in the cloud?",
-        answer: "Yes, with our Pro plan, you can connect cloud storage services and rename files directly within them.",
+        answer: "Yes, you can connect cloud storage services and rename files directly within them.(Coming soon).",
     },
     {
         question: "How does cloud integration work?",
