@@ -7,6 +7,8 @@ import ProtectedRoute from "./components/auth/protectedRoute"
 import PricingPage from "./pages/pricing"
 import RenamePage from "./pages/rename"
 import HistoryPage from "./pages/history"
+import PrivacyPolicy from "./pages/privacyPolicy"
+import TermsOfService from "./pages/termsOfService"
 import { useEffect, useState } from "react"
 import { Toaster } from "react-hot-toast"
 import { useAuth } from "./context/authContext"
@@ -74,6 +76,8 @@ export default function App() {
                     />
                     <Route path="pricing" element={<PricingPage creditBalance={creditBalance} setCreditBalance={setCreditBalance} />} />
                     <Route path="history" element={<HistoryPage creditBalance={creditBalance}/>} />
+                    <Route path="privacy-policy" element={<PrivacyPolicy />} />
+                    <Route path="terms-of-service" element={<TermsOfService />} />
                 </Route>
             </Routes>
             <Toaster position="top-right" reverseOrder={false} />
