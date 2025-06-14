@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 const supabase = createClient(process.env.VITE_SUPABASE_URL, process.env.VITE_SUPABASE_ANON_KEY);
-const razorpay = new Razorpay({key_id: process.env.VITE_RZRPY_TEST_KEY, key_secret: process.env.VITE_RZRPY_TEST_SECRET});
+const razorpay = new Razorpay({key_id: process.env.VITE_RZRPY_KEY, key_secret: process.env.VITE_RZRPY_SECRET});
 
 app.post('/payment', async (req, res) => {
     const { amount, currency } = req.body;
@@ -41,7 +41,7 @@ app.post('/verify', (req, res) => {
     }
 
     try{
-        const secret = process.env.VITE_RZRPY_TEST_SECRET;
+        const secret = process.env.VITE_RZRPY_SECRET;
         const generated_signature = crypto
             .createHmac('sha256', secret)
             .update(order_id + "|" + payment_id)

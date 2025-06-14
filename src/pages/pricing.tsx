@@ -33,7 +33,7 @@ export default function PricingPage({ creditBalance, setCreditBalance }: Pricing
 
             if (res && res.data) {
                 var options = {
-                    "key": import.meta.env.VITE_RZRPY_TEST_KEY,
+                    "key": import.meta.env.VITE_RZRPY_KEY,
                     "amount": amount,
                     "currency": isIndia ? "INR" : "USD",
                     "name": "Rename Wave",
