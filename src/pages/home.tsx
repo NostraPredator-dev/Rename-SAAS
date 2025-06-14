@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
     ArrowRight,
     FileText,
@@ -15,6 +15,7 @@ import {
     Sparkles 
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getUserCountryCode } from '../lib/location';
 
 const faqs = [
     {
@@ -49,6 +50,15 @@ const faqs = [
 
 export default function HomePage() {
     const [openIndex, setOpenIndex] = useState(-1);
+    const [isIndia, setIsIndia] = useState<boolean>(true);
+
+    useEffect(() => {
+        const detectLocation = async () => {
+            const country = await getUserCountryCode();
+            setIsIndia(country === 'IN');
+        }
+        detectLocation();
+    }, []);
     
     const toggleFAQ = (index: number) => {
         setOpenIndex(openIndex === index ? -1 : index);
@@ -296,7 +306,7 @@ export default function HomePage() {
                             <div>
                                 <div className="inline-block bg-primary-100 text-primary-700 text-xs font-semibold px-3 py-1 rounded-full mb-4">Starter</div>
                                 <h3 className="text-2xl font-bold">1000 Credits</h3>
-                                <p className="text-4xl font-bold text-primary-800 mb-2">₹400</p>
+                                <p className="text-4xl font-bold text-primary-800 mb-2">{isIndia ? '₹400' : '$4.99'}</p>
                                 <p className="text-primary-600 text-sm mb-4">Ideal for designer & students</p>
                                 <div className="flex bg-primary-50 text-xs font-semibold text-primary-700 px-4 py-2 rounded mb-10">
                                     <Sparkles size={16} className="mr-2" /> Try it out with minimal investment
@@ -320,7 +330,7 @@ export default function HomePage() {
                             <div>
                                 <div className="inline-block bg-accent-100 text-accent-700 text-xs font-semibold px-3 py-1 rounded-full mb-4">Most Popular</div>
                                 <h3 className="text-2xl font-bold">5000 Credits</h3>
-                                <p className="text-4xl font-bold text-accent-800 mb-2">₹1200</p>
+                                <p className="text-4xl font-bold text-accent-800 mb-2">{isIndia ? '₹1200' : '$14.99'}</p>
                                 <p className="text-accent-600 text-sm mb-4">Great for photographers & content creators</p>
                                 <div className="flex bg-accent-50 text-xs font-semibold text-accent-700 px-4 py-2 rounded mb-10">
                                     <Sparkles size={16} className="mr-2" /> Best value for most users
@@ -343,7 +353,7 @@ export default function HomePage() {
                             <div>
                                 <div className="inline-block bg-tertiary-100 text-tertiary-700 text-xs font-semibold px-3 py-1 rounded-full mb-4">High Volume</div>
                                 <h3 className="text-2xl font-bold">20,000 Credits</h3>
-                                <p className="text-4xl font-bold text-tertiary-700 mb-2">₹4500</p>
+                                <p className="text-4xl font-bold text-tertiary-700 mb-2">{isIndia ? '₹4500' : '$49.99'}</p>
                                 <p className="text-tertiary-600 text-sm mb-4">Perfect for studios, agencies & businesses</p>
                                 <div className="flex bg-tertiary-50 text-xs font-semibold text-tertiary-700 px-4 py-2 rounded mb-10">
                                     <Sparkles size={16} className="mr-2" /> For high-volume needs

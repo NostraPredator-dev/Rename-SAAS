@@ -2,7 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const { createClient } = require('@supabase/supabase-js');
 const { v4: uuidv4 } = require('uuid');
-const { Cashfree, CFEnvironment } = require('cashfree-pg');
+const crypto = require('crypto');
+const Razorpay = require('razorpay');
 require('dotenv').config();
 
 const app = express();
@@ -10,50 +11,47 @@ app.use(cors());
 app.use(express.json());
 
 const supabase = createClient(process.env.VITE_SUPABASE_URL, process.env.VITE_SUPABASE_ANON_KEY);
-const cashfree = new Cashfree(CFEnvironment.SANDBOX, process.env.VITE_TEST_CASHFREE_APP_ID, process.env.VITE_TEST_CASHFREE_SECRET_KEY);
+const razorpay = new Razorpay({key_id: process.env.VITE_RZRPY_TEST_KEY, key_secret: process.env.VITE_RZRPY_TEST_SECRET});
 
-app.post('/payment', (req, res) => {
-    const { amount, credit, order_id, customer_id, customer_name, customer_email } = req.body;
+app.post('/payment', async (req, res) => {
+    const { amount, currency } = req.body;
 
     try {
         const orderRequest = {
-            'order_currency': 'INR',
-            'order_amount': amount,
-            'order_id': order_id,
-            'order_note': `${credit}`,
-            'customer_details': {
-                'customer_id': customer_id,
-                'customer_name': customer_name,
-                'customer_phone': '9999999999',
-                'customer_email': customer_email
-            },
+            amount: amount,
+            currency: currency,
         }
 
-        cashfree.PGCreateOrder(orderRequest)
-            .then((response) => {
-                var a = response.data
-                res.json(a);
-            })
-            .catch((error) => {
-                console.error("Error setting up order req: ", error.response.data);
-            });
+        await razorpay.orders.create(orderRequest, function(err, order) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.json(order);
+            }
+        })
     } catch (error) {
         console.error(error);
     }
 })
 
-app.get('/verify', (req, res) => {
-    const order_id = req.query.order_id
+app.post('/verify', (req, res) => {
+    const {order_id, payment_id, signature } = req.body;
+    if (!order_id || !payment_id || !signature) {
+        return res.status(400).json({ error: 'Missing required fields' });
+    }
 
     try{
-        cashfree.PGFetchOrder(order_id)
-            .then((response) => {
-                var a = response.data
-                res.json(a);
-            })
-            .catch((error) => {
-                console.error("Error setting up order req: ", error);
-            });
+        const secret = process.env.VITE_RZRPY_TEST_SECRET;
+        const generated_signature = crypto
+            .createHmac('sha256', secret)
+            .update(order_id + "|" + payment_id)
+            .digest('hex');
+
+        if (generated_signature === signature) {
+            res.status(200).json({success: true, message: "Payment verified successfully!"});
+        } else {
+            res.status(400).json({success: false, message: "Payment verification failed!"});
+        }
     } catch (error) {
         console.error(error);
     }
