@@ -1,5 +1,11 @@
 # RenameWave
-[![Ask DeepWiki](https://devin.ai/assets/askdeepwiki.png)](https://deepwiki.com/NostraPredator-dev/Rename-SAAS)
+[![React](https://img.shields.io/badge/Frontend-React-%2361DAFB?logo=react&logoColor=white)](https://reactjs.org)
+[![Node.js](https://img.shields.io/badge/Backend-Node.js-%23339933?logo=node.js&logoColor=white)](https://nodejs.org)
+[![Express](https://img.shields.io/badge/API-Express-%23000000?logo=express&logoColor=white)](https://expressjs.com)
+[![MongoDB](https://img.shields.io/badge/Database-MongoDB-%2347A248?logo=mongodb&logoColor=white)](https://mongodb.com)
+[![Tailwind CSS](https://img.shields.io/badge/UI-TailwindCSS-%2306B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![TypeScript](https://img.shields.io/badge/Language-TypeScript-%23007ACC?logo=typescript&logoColor=white)](https://typescriptlang.org)
+[![GitHub Actions](https://img.shields.io/badge/CI-GitHub%20Actions-%232671E5?logo=githubactions&logoColor=white)](https://docs.github.com/en/actions)
 
 RenameWave is a powerful and intuitive SAAS application designed to help you rename multiple files in bulk effortlessly. Save time and organize your digital assets with just a few clicks using our smart renaming rules and user-friendly interface.
 
