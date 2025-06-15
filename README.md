@@ -1,54 +1,123 @@
-# React + TypeScript + Vite
+# RenameWave
+[![Ask DeepWiki](https://devin.ai/assets/askdeepwiki.png)](https://deepwiki.com/NostraPredator-dev/Rename-SAAS)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+RenameWave is a powerful and intuitive SAAS application designed to help you rename multiple files in bulk effortlessly. Save time and organize your digital assets with just a few clicks using our smart renaming rules and user-friendly interface.
 
-Currently, two official plugins are available:
+## Key Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+*   **Batch File Renaming:** Upload and rename hundreds of files at once.
+*   **Flexible Renaming Rules:**
+    *   Add Prefixes/Suffixes
+    *   Replace Text
+    *   Sequential Numbering (custom start, step, and digit padding)
+    *   Add Dates (various formats, prefix/suffix position)
+*   **Real-time Preview:** Instantly see how your filenames will change before applying.
+*   **Rule Presets:** Save and load your favorite renaming configurations for quick reuse.
+*   **Secure User Authentication:** Sign in with Google, powered by Supabase.
+*   **Credit-Based System:** Purchase credits for renaming operations via Razorpay.
+*   **Transaction History:** Keep track of your credit usage and purchases.
+*   **Download Options:** Download individually renamed files or as a single ZIP archive.
+*   **Responsive Design:** Works seamlessly on desktop devices.
+*   **(Coming Soon) Cloud Storage Integration:** Rename files directly from services like Google Drive, Dropbox, etc.
 
-## Expanding the ESLint configuration
+## How It Works
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1.  **Upload Files:** Drag and drop your files or select them from your computer.
+2.  **Define Rules:** Create custom renaming rules (e.g., add prefix/suffix, replace text, insert numbers/dates) or apply a saved preset.
+3.  **Preview & Rename:** See a live preview of the new filenames. Once satisfied, apply the rules. Credits will be deducted based on the number of files processed.
+4.  **Download:** Download your newly renamed files, either individually or as a ZIP archive.
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Tech Stack
+
+*   **Frontend:** React, TypeScript, Vite, Tailwind CSS, Framer Motion
+*   **Backend:** Node.js, Express.js
+*   **Authentication & Database:** Supabase
+*   **Payments:** Razorpay
+*   **Core Libraries:** `axios`, `jszip`, `lucide-react` (icons), `react-dropzone`, `react-hot-toast`, `react-router-dom`, `uuid`
+
+## Project Structure
+
+The project is organized into a frontend application and a backend server:
+```
+└── rename-saas/
+    ├── public/                 # Static assets (e.g., logo.png)
+    ├── src/                    # Frontend source code (React, TypeScript)
+    │   ├── components/         # Reusable UI components (auth, rename logic)
+    │   ├── context/            # React Context API (e.g., authContext)
+    │   ├── layout/             # Main layout components (Header, Footer)
+    │   ├── lib/                # Client-side libraries (Supabase client, location utils)
+    │   ├── pages/              # Page components for different routes
+    │   ├── @types/             # Custom type definitions
+    │   ├── App.tsx             # Main application component with routing
+    │   ├── main.tsx            # Application entry point
+    │   └── index.css           # Global styles and Tailwind directives
+    ├── eslint.config.js        # ESLint configuration
+    ├── index.html              # Main HTML file for Vite
+    ├── package.json            # Project dependencies and scripts
+    ├── server.cjs              # Backend Express server (handles payments, presets, credits)
+    ├── tsconfig.json           # Root TypeScript configuration
+    ├── tsconfig.app.json       # TypeScript configuration for the app
+    ├── tsconfig.node.json      # TypeScript configuration for Node.js parts (like vite.config.ts)
+    └── vite.config.ts          # Vite bundler configuration
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Getting Started
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+**Prerequisites:**
+*   Node.js (v18 or later recommended)
+*   npm (comes with Node.js) or yarn
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+**1. Clone the repository:**
+```bash
+git clone https://github.com/NostraPredator-dev/Rename-SAAS.git
+cd Rename-SAAS
 ```
+
+**2. Install dependencies:**
+```bash
+npm install
+```
+or
+```bash
+yarn install
+```
+
+**3. Set up Environment Variables:**
+Create a `.env` file in the root of the project and add the following environment variables. You will need to obtain these keys from your Supabase project and Razorpay dashboard.
+
+```env
+# Supabase Configuration
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+# Razorpay Configuration
+VITE_RZRPY_KEY=your_razorpay_key_id
+VITE_RZRPY_SECRET=your_razorpay_key_secret
+```
+
+**4. Running the Application:**
+
+*   **Backend Server:**
+    Open a terminal in the project root and run:
+    ```bash
+    node server.cjs
+    ```
+    The backend server will start, typically on `http://localhost:3000` (as specified in `server.cjs`).
+
+*   **Frontend Development Server:**
+    Open another terminal in the project root and run:
+    ```bash
+    npm run dev
+    ```
+    or
+    ```bash
+    yarn dev
+    ```
+    This will start the Vite development server, usually accessible at `http://localhost:5173`. Open this URL in your browser.
+
+## Available Scripts
+
+*   `npm run dev`: Starts the Vite frontend development server with HMR.
+*   `npm run build`: Compiles TypeScript and builds the frontend application for production into the `dist` folder.
+*   `npm run lint`: Lints the codebase using ESLint to check for code quality and style issues.
+*   `npm run preview`: Serves the production build locally to preview the application as it would appear in production.
