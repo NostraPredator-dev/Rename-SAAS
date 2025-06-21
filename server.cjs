@@ -10,6 +10,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const port = process.env.PORT || 8080;
+
 const supabase = createClient(process.env.VITE_SUPABASE_URL, process.env.VITE_SUPABASE_ANON_KEY);
 const razorpay = new Razorpay({key_id: process.env.VITE_RZRPY_KEY, key_secret: process.env.VITE_RZRPY_SECRET});
 
@@ -239,6 +241,6 @@ app.get('/credit-balance', async (req, res) => {
     }
 })
 
-app.listen(3000, () => {
-    console.log('Server is listening on port 3000');
+app.listen(port, () => {
+    console.log('Server is listening on port:', port);
 });

@@ -79,7 +79,7 @@ const RenameRules: React.FC<RenameRulesProps> = ({ rules, setRules, onFilenamesC
             return;
         }
         
-        const response = await axios.post('http://localhost:3000/save-preset', {
+        const response = await axios.post('http://13.203.194.44:3000/save-preset', {
             userId: userId,
             presetName: presetName,
             presetData: presetData

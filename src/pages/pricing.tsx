@@ -26,7 +26,7 @@ export default function PricingPage({ creditBalance, setCreditBalance }: Pricing
 
     const doPayment = async (amount: number, credits: number) => {
         try{
-            const res = await axios.post('http://localhost:3000/payment', {
+            const res = await axios.post('http://13.203.194.44:3000/payment', {
                 amount: amount,
                 currency: isIndia ? "INR" : "USD",
             });
@@ -72,7 +72,7 @@ export default function PricingPage({ creditBalance, setCreditBalance }: Pricing
             return;
         }
 
-        const response = await axios.post('http://localhost:3000/credit-history', {
+        const response = await axios.post('http://13.203.194.44:3000/credit-history', {
             user_id: userId,
             amount: `+` + credits,
             reason: 'Purchased Credits',
@@ -92,7 +92,7 @@ export default function PricingPage({ creditBalance, setCreditBalance }: Pricing
         }
 
         try{
-            const response = await axios.post('http://localhost:3000/credit-balance', {
+            const response = await axios.post('http://13.203.194.44:3000/credit-balance', {
                 user_id: userId,
                 credits: creditBalance + credits,
             })
@@ -114,7 +114,7 @@ export default function PricingPage({ creditBalance, setCreditBalance }: Pricing
         razorpay_signature: string
     }, credits: number) => {
         try{
-            const res = await axios.post('http://localhost:3000/verify', { 
+            const res = await axios.post('http://13.203.194.44:3000/verify', { 
                 order_id: response.razorpay_order_id,
                 payment_id: response.razorpay_payment_id,
                 signature: response.razorpay_signature
