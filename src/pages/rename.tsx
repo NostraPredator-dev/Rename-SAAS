@@ -29,7 +29,7 @@ export default function RenamePage({ creditBalance, setCreditBalance, downloadRe
             return;
         }
 
-        const response = await axios.post('http://13.203.194.44:3000/credit-history', {
+        const response = await axios.post('/api/credit-history', {
             user_id: userId,
             amount: (`-` + files.length),
             reason: name,
@@ -49,7 +49,7 @@ export default function RenamePage({ creditBalance, setCreditBalance, downloadRe
             return;
         }
 
-        const response = await axios.post('http://13.203.194.44:3000/credit-balance', {
+        const response = await axios.post('/api/credit-balance', {
             user_id: userId,
             credits: credits,
         })

@@ -26,7 +26,7 @@ export default function HistoryPage({ creditBalance }: HistoryPageProps) {
             return;
         }
 
-        const response = await axios.get('http://13.203.194.44:3000/credit-history', {
+        const response = await axios.get('/api/credit-history', {
             params: {
                 user_id: userId
             }
