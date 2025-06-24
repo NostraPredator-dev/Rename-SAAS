@@ -26,7 +26,7 @@ export default function HistoryPage({ creditBalance }: HistoryPageProps) {
             return;
         }
 
-        const response = await axios.get('/api/credit-history', {
+        const response = await axios.get('https://rename-saas.onrender.com/credit-history', {
             params: {
                 user_id: userId
             }

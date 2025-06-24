@@ -22,14 +22,14 @@ export default function App() {
 
     useEffect(() => {
         async function getBalance(id: string) {
-            const res = await axios.get('/api/credit-balance', { 
+            const res = await axios.get('https://rename-saas.onrender.com/credit-balance', { 
                 params: {
                     user_id: id 
                 } 
             });
 
             if (!res || res.data.length === 0) {
-                const response = await axios.post('/api/create-credit-balance', {
+                const response = await axios.post('https://rename-saas.onrender.com/create-credit-balance', {
                     user_id: id,
                 })
                 if (response.status !== 200) {

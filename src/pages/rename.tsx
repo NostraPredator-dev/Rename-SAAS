@@ -29,7 +29,7 @@ export default function RenamePage({ creditBalance, setCreditBalance, downloadRe
             return;
         }
 
-        const response = await axios.post('/api/credit-history', {
+        const response = await axios.post('https://rename-saas.onrender.com/credit-history', {
             user_id: userId,
             amount: (`-` + files.length),
             reason: name,
@@ -49,7 +49,7 @@ export default function RenamePage({ creditBalance, setCreditBalance, downloadRe
             return;
         }
 
-        const response = await axios.post('/api/credit-balance', {
+        const response = await axios.post('https://rename-saas.onrender.com/credit-balance', {
             user_id: userId,
             credits: credits,
         })
