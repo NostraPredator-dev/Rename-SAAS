@@ -1,7 +1,7 @@
 # RenameWave
 [![React](https://img.shields.io/badge/Frontend-React-%2361DAFB?logo=react&logoColor=white)](https://reactjs.org)
 [![Node.js](https://img.shields.io/badge/Backend-Node.js-%23339933?logo=node.js&logoColor=white)](https://nodejs.org)
-[![Express](https://img.shields.io/badgehttps://rename-saas.onrender.com-Express-%23000000?logo=express&logoColor=white)](https://expressjs.com)
+[![Express](https://img.shields.io/badgeAPI-Express-%23000000?logo=express&logoColor=white)](https://expressjs.com)
 [![Supabase](https://img.shields.io/badge/Database-Supabase-%2347A248?logo=supabse&logoColor=white)](https://supabase.com)
 [![Tailwind CSS](https://img.shields.io/badge/UI-TailwindCSS-%2306B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 [![TypeScript](https://img.shields.io/badge/Language-TypeScript-%23007ACC?logo=typescript&logoColor=white)](https://typescriptlang.org)

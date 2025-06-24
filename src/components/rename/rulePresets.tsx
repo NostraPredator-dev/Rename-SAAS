@@ -42,7 +42,7 @@ const RulePresets: React.FC<RulePresetsProps> = ({ onFilenamesChange }) => {
             return;
         }
 
-        const response = await axios.get('http://13.203.194.44:3000/get-presets', {
+        const response = await axios.get('https://rename-saas.onrender.com/get-presets', {
             params: {
                 user_id: userId
             }
@@ -69,7 +69,7 @@ const RulePresets: React.FC<RulePresetsProps> = ({ onFilenamesChange }) => {
             return;
         }
 
-        const response = await axios.post('http://13.203.194.44:3000/delete-preset', {
+        const response = await axios.post('https://rename-saas.onrender.com/delete-preset', {
             id: id,
             user_id: userId
         });
